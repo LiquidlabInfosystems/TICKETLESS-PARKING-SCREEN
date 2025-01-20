@@ -4,9 +4,9 @@ const WebSocket = require('ws');
 const path = require('path');
 const { exec } = require('child_process');
 const app = express();
-// const PORT = 9090;
 const WEBSOCKET_PORT = 8000;
 const os = require('os');
+const { execSync } = require('child_process');
 
 // Create an HTTP server
 const server = http.createServer(app);
@@ -46,7 +46,6 @@ wss.on('connection', (ws) => {
     });
 });
 
-
 // Function to get the current IP address
 function getIPAddress() {
     const interfaces = os.networkInterfaces();
@@ -58,23 +57,48 @@ function getIPAddress() {
             }
         }
     }
-    return '127.0.0.1'; // Fallback to localhost if no IP is found
+    return null; // No IP found
 }
-// app.listen(PORT, "0.0.0.0", () => {
-//     const ip = getIPAddress();
-//     console.log(`app is running on http://${ip}:${PORT}`);
 
-// })
-server.listen(WEBSOCKET_PORT, "0.0.0.0", () => {
+// Function to check if the device has a valid IP address
+function checkForIP() {
     const ip = getIPAddress();
-    console.log(`WEBSOCKET is running on http://${ip}:${WEBSOCKET_PORT}`);
+    return ip !== null; // Returns true if a valid IP address is found
+}
 
-    // Automatically open the browser
-    exec(`chromium-browser --kiosk --disable-infobars --noerrdialogs  http://${ip}:${WEBSOCKET_PORT}`, (err, stdout, stderr) => {
-        if (err) {
-            console.error(`Error opening browser: ${stderr}`);
-        } else {
-            console.log("Browser opened");
-        }
+// Function to start the server and browser
+function startServer() {
+    const ip = getIPAddress();
+    if (!ip) {
+        console.log('No IP address found. Retrying in 5 seconds...');
+        setTimeout(waitForIPAndStart, 5000); // Retry every 5 seconds
+        return;
+    }
+
+    server.listen(WEBSOCKET_PORT, "0.0.0.0", () => {
+        console.log(`WEBSOCKET is running on http://${ip}:${WEBSOCKET_PORT}`);
+
+        // Automatically open the browser
+        exec(`chromium-browser --kiosk --disable-infobars --noerrdialogs  http://${ip}:${WEBSOCKET_PORT}`, (err, stdout, stderr) => {
+            if (err) {
+                console.error(`Error opening browser: ${stderr}`);
+            } else {
+                console.log("Browser opened");
+            }
+        });
     });
-});
+}
+
+// Retry logic: keep trying until the IP address is found
+function waitForIPAndStart() {
+    if (checkForIP()) {
+        console.log("IP address found. Starting server...");
+        startServer();
+    } else {
+        console.log("No IP address found. Retrying in 5 seconds...");
+        setTimeout(waitForIPAndStart, 5000); // Retry every 5 seconds
+    }
+}
+
+// Start the process
+waitForIPAndStart();
