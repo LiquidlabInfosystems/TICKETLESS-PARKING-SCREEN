@@ -4,8 +4,8 @@ const WebSocket = require('ws');
 const path = require('path');
 const { exec } = require('child_process');
 const app = express();
-const PORT = 8000;
-const WEBSOCKET_PORT = 9090;
+// const PORT = 9090;
+const WEBSOCKET_PORT = 8000;
 const os = require('os');
 
 // Create an HTTP server
@@ -70,11 +70,11 @@ server.listen(WEBSOCKET_PORT, "0.0.0.0", () => {
     console.log(`WEBSOCKET is running on http://${ip}:${WEBSOCKET_PORT}`);
 
     // Automatically open the browser
-    exec('chromium-browser http://localhost:8000', (err, stdout, stderr) => {
-        if (err) {
-            console.error(`Error opening browser: ${stderr}`);
-        } else {
-            console.log("Browser opened");
-        }
-    });
+    // exec('chromium-browser http://localhost:9090', (err, stdout, stderr) => {
+    //     if (err) {
+    //         console.error(`Error opening browser: ${stderr}`);
+    //     } else {
+    //         console.log("Browser opened");
+    //     }
+    // });
 });
