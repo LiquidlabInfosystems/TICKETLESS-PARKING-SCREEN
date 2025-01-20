@@ -60,17 +60,17 @@ function getIPAddress() {
     }
     return '127.0.0.1'; // Fallback to localhost if no IP is found
 }
-app.listen(PORT, "0.0.0.0", () => {
-    const ip = getIPAddress();
-    console.log(`app is running on http://${ip}:${PORT}`);
+// app.listen(PORT, "0.0.0.0", () => {
+//     const ip = getIPAddress();
+//     console.log(`app is running on http://${ip}:${PORT}`);
 
-})
+// })
 server.listen(WEBSOCKET_PORT, "0.0.0.0", () => {
     const ip = getIPAddress();
     console.log(`WEBSOCKET is running on http://${ip}:${WEBSOCKET_PORT}`);
 
     // Automatically open the browser
-    exec('chromium-browser http://localhost:3000', (err, stdout, stderr) => {
+    exec('chromium-browser http://localhost:8000', (err, stdout, stderr) => {
         if (err) {
             console.error(`Error opening browser: ${stderr}`);
         } else {
