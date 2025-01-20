@@ -46,8 +46,15 @@ wss.on('connection', (ws) => {
 });
 
 
-
-// Start the server
-server.listen(PORT, () => {
+app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
+
+    // Automatically open the browser
+    exec('chromium-browser http://localhost:3000', (err, stdout, stderr) => {
+        if (err) {
+            console.error(`Error opening browser: ${stderr}`);
+        } else {
+            console.log("Browser opened");
+        }
+    });
 });
