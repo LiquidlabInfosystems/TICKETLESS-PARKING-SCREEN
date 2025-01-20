@@ -33,7 +33,6 @@ app.get('*', (req, res) => {
 // WebSocket connection handler
 wss.on('connection', (ws) => {
     console.log('New WebSocket connection established');
-
     ws.on('message', (message) => {
         const textToSend = message.toString();
         broadcast(textToSend); // Send text to all WebSocket clients
@@ -46,7 +45,7 @@ wss.on('connection', (ws) => {
 });
 
 
-app.listen(PORT, () => {
+app.listen(PORT, "192.168.1.5",() => {
     console.log(`Server is running on http://localhost:${PORT}`);
 
     // Automatically open the browser
