@@ -70,7 +70,7 @@ server.listen(WEBSOCKET_PORT, "0.0.0.0", () => {
     console.log(`WEBSOCKET is running on http://${ip}:${WEBSOCKET_PORT}`);
 
     // Automatically open the browser
-    exec(`chromium-browser http://${ip}:${WEBSOCKET_PORT}`, (err, stdout, stderr) => {
+    exec(`chromium-browser --kiosk --disable-infobars --noerrdialogs  http://${ip}:${WEBSOCKET_PORT}`, (err, stdout, stderr) => {
         if (err) {
             console.error(`Error opening browser: ${stderr}`);
         } else {
