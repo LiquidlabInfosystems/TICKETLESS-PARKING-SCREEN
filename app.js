@@ -5,6 +5,7 @@ const path = require('path');
 const { exec } = require('child_process');
 const app = express();
 const PORT = 8000;
+const WEBSOCKET_PORT = 9090;
 const os = require('os');
 
 // Create an HTTP server
@@ -59,10 +60,14 @@ function getIPAddress() {
     }
     return '127.0.0.1'; // Fallback to localhost if no IP is found
 }
-
 app.listen(PORT, "0.0.0.0", () => {
     const ip = getIPAddress();
-    console.log(`Server is running on http://${ip}:${PORT}`);
+    console.log(`app is running on http://${ip}:${PORT}`);
+
+})
+server.listen(WEBSOCKET_PORT, "0.0.0.0", () => {
+    const ip = getIPAddress();
+    console.log(`WEBSOCKET is running on http://${ip}:${WEBSOCKET_PORT}`);
 
     // Automatically open the browser
     exec('chromium-browser http://localhost:3000', (err, stdout, stderr) => {
