@@ -5,6 +5,7 @@ const path = require('path');
 const { exec } = require('child_process');
 const app = express();
 const PORT = 8000;
+const os = require('os');
 
 // Create an HTTP server
 const server = http.createServer(app);
@@ -45,8 +46,23 @@ wss.on('connection', (ws) => {
 });
 
 
-app.listen(PORT, "0.0.0.0",() => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+// Function to get the current IP address
+function getIPAddress() {
+    const interfaces = os.networkInterfaces();
+    for (const interfaceName in interfaces) {
+        for (const iface of interfaces[interfaceName]) {
+            // Check for IPv4 and skip internal (localhost) addresses
+            if (iface.family === 'IPv4' && !iface.internal) {
+                return iface.address;
+            }
+        }
+    }
+    return '127.0.0.1'; // Fallback to localhost if no IP is found
+}
+
+app.listen(PORT, "0.0.0.0", () => {
+    const ip = getIPAddress();
+    console.log(`Server is running on http://${ip}:${PORT}`);
 
     // Automatically open the browser
     exec('chromium-browser http://localhost:3000', (err, stdout, stderr) => {
