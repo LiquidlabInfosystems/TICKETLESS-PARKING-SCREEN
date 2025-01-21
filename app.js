@@ -100,5 +100,15 @@ function waitForIPAndStart() {
     }
 }
 
+
+// Graceful shutdown handler
+process.on('SIGINT', () => {
+    console.log('Shutting down server...');
+    server.close(() => {
+        console.log('Server closed.');
+        process.exit(0);
+    });
+});
+
 // Start the process
 waitForIPAndStart();
