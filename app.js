@@ -79,13 +79,13 @@ function startServer() {
         console.log(`WEBSOCKET is running on http://${ip}:${WEBSOCKET_PORT}`);
 
         // Automatically open the browser
-        exec(`chromium-browser --kiosk --disable-infobars --noerrdialogs  http://${ip}:${WEBSOCKET_PORT}`, (err, stdout, stderr) => {
-            if (err) {
-                console.error(`Error opening browser: ${stderr}`);
-            } else {
-                console.log("Browser opened");
-            }
-        });
+        // exec(`chromium-browser --kiosk --disable-infobars --noerrdialogs  http://${ip}:${WEBSOCKET_PORT}`, (err, stdout, stderr) => {
+        //     if (err) {
+        //         console.error(`Error opening browser: ${stderr}`);
+        //     } else {
+        //         console.log("Browser opened");
+        //     }
+        // });
     });
 }
 
